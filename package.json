@@ -1,0 +1,39 @@
+{
+  "name": "DesafioZhealth",
+  "version": "1.0.0",
+  "description": "Desafio da empresa Zhealth, api de sistema hospitalar!",
+  "main": "./src/server.js",
+  "scripts": {
+    "prod": "node ./src/server.js",
+    "dev": "nodemon --exec sucrase-node ./src/server.js",
+    "eslint-fix": "yarn eslint --fix --ext .js src/"
+  },
+  "keywords": [
+    "nodejs",
+    "express"
+  ],
+  "author": {
+    "name": "Huriel Lopes",
+    "email": "huriellopes1996@gmail.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.18"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "sequelize-cli": "^5.5.1",
+    "sucrase": "^3.15.0"
+  }
+}
