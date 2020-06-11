@@ -21,7 +21,7 @@
 ### clone o repositório:
 
 ````
-git clone
+git clone https://github.com/huriellopes/DesafioZhealth.git
 ````
 
 ### Acesse a pasta do projeto, rode o seguinte comando:
