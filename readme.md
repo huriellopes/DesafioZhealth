@@ -15,6 +15,15 @@
 - Cors
 - Compression
 - Bcryptjs
+- Crypto
+- Morgan
+- Celebrate
+- FS
+- Path
+- Eslint
+- Prettier
+- Mochajs
+- Chaijs
 
 ## Para testar o projeto:
 
@@ -42,6 +51,16 @@ cp .env.example .env ou copy .env.example .env
 
 ````
 APP_PORT=
+````
 
-APP_TOKEN=
+### Rode o seguinte comando, para gerar o token da aplicação:
+
+````
+yarn key:generate
+````
+
+### Depois inicialize o servidor:
+
+````
+yarn dev
 ````
