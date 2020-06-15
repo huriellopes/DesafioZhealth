@@ -96,3 +96,11 @@ yarn dev
   - POST - /prescription/create
   - PUT - /prescription/:prescriptionId
   - DELETE - /prescription/:prescriptionId
+
+## Créditos
+
+- Empresa: Zhealth
+
+## License
+
+- MIT LICENSE
