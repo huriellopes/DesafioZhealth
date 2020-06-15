@@ -1,4 +1,4 @@
-const Medico = require('../models/medico')
+const Doctor = require('../models/doctor')
 const bcrypt = require('bcryptjs')
 const jwt = require('../middlewares/generateJWT')
 const crypto = require('../../lib/tokenGenerate')
@@ -6,25 +6,47 @@ const mailer = require('../../modules/mailer')
 
 module.exports = {
   async post(req, res) {
-    const { email } = req.body
+    const {
+      name,
+      cpf,
+      email,
+      birth,
+      crm,
+      state_crm,
+      gender,
+      password,
+      repeat_password,
+    } = req.body
 
     try {
-      if (await Medico.findOne({ email }))
+      if (await Doctor.findOne({ email }))
         return res.status(400).send({ error: 'Doctor already exists' })
 
-      const medico = await Medico.create(req.body)
+      if (password !== repeat_password)
+        return res.status(400).send({ error: 'Password Mismatch' })
 
-      medico.senha = undefined
+      const doctor = await Doctor.create({
+        name,
+        cpf,
+        email,
+        birth,
+        crm,
+        state_crm,
+        gender,
+        password,
+      })
+
+      doctor.password = undefined
 
       return res.status(201).send({
         success: 'Doctor register success',
-        medico,
+        doctor,
         token: jwt({
-          id: medico.id,
-          name: medico.name,
-          cpf: medico.cpf,
-          crm: medico.crm,
-          registration_state: medico.registration_status,
+          id: doctor.id,
+          name: doctor.name,
+          cpf: doctor.cpf,
+          crm: doctor.crm,
+          state_crm: doctor.state_crm,
         }),
       })
     } catch (err) {
@@ -32,49 +54,50 @@ module.exports = {
     }
   },
   async auth(req, res) {
-    const { email, senha } = req.body
+    const { email, password } = req.body
     try {
-      const medico = await Medico.findOne({ email }).select('+senha')
+      const doctor = await Doctor.findOne({ email }).select('+password')
 
-      if (!medico) return res.status(404).send({ error: 'Doctor Not Found' })
+      if (!doctor) return res.status(404).send({ error: 'Doctor Not Found' })
 
-      if (!(await bcrypt.compare(senha, medico.senha)))
+      if (!(await bcrypt.compare(password, doctor.password)))
         return res.status(400).send({ error: 'Invalid password' })
 
-      medico.senha = undefined
+      doctor.password = undefined
 
       return res.send({
-        medico,
+        doctor,
         token: jwt({
-          id: medico.id,
-          name: medico.name,
-          cpf: medico.cpf,
-          crm: medico.crm,
-          registration_state: medico.registration_status,
+          id: doctor.id,
+          name: doctor.name,
+          cpf: doctor.cpf,
+          crm: doctor.crm,
+          state_crm: doctor.state_crm,
         }),
       })
     } catch (err) {
+      console.log(err)
       return res.status(400).send({ error: 'Authentication Failed' })
     }
   },
   async forgot_password(req, res) {
     const { email } = req.body
     try {
-      const medico = await Medico.findOne({ email })
+      const doctor = await Doctor.findOne({ email })
 
-      if (!medico) return res.status(404).send({ error: 'Doctor not found' })
+      if (!doctor) return res.status(404).send({ error: 'Doctor not found' })
 
       const token = crypto
 
       const now = new Date()
       now.setHours(now.getHours() + 1)
 
-      await Medico.findByIdAndUpdate(
-        medico.id,
+      await Doctor.findByIdAndUpdate(
+        doctor.id,
         {
           $set: {
-            senhaResetToken: token,
-            senhaResetExpires: now,
+            passwordResetToken: token,
+            passwordResetExpires: now,
           },
         },
         { new: true, useFindAndModify: false }
@@ -103,32 +126,31 @@ module.exports = {
         .status({ error: 'Error on forgot password, try again' })
     }
   },
-
   async reset(req, res) {
-    const { email, token, senha, confirmar_senha } = req.body
+    const { email, token, password, repeat_password } = req.body
     try {
-      const medico = await Medico.findOne({ email }).select(
-        '+senhaResetToken senhaResetExpires'
+      const doctor = await Doctor.findOne({ email }).select(
+        '+passwordResetToken passwordResetExpires'
       )
 
-      if (!medico) return res.status(404).send({ error: 'Medico not Found' })
+      if (!doctor) return res.status(404).send({ error: 'Doctor not Found' })
 
-      if (token !== medico.senhaResetToken)
+      if (token !== doctor.passwordResetToken)
         return res.status(400).send({ error: 'Token invalid' })
 
-      if (senha !== confirmar_senha)
-        return res.status(400).send({ error: 'Password not identic' })
+      if (password !== repeat_password)
+        return res.status(400).send({ error: 'Password Mismatch' })
 
       const now = new Date()
 
-      if (now > medico.senhaResetExpires)
+      if (now > doctor.passwordResetExpires)
         return res
           .status(400)
           .send({ error: 'Token expired, generate a new one' })
 
-      medico.senha = senha
+      doctor.password = password
 
-      medico.save()
+      doctor.save()
 
       return res.status(200).send({ success: 'Password updated success' })
     } catch (err) {

@@ -1,6 +1,6 @@
 # Desafio da Zhealth
 
-> Desafio do processo seletivo para vaga de desenvolvedor nodejs junior, com o tema de api de um serviço de prescrição de medicamentos!
+> Desafio do processo seletivo para vaga de Desenvolvedor Node.Js Júnior, com o tema de api de um serviço de prescrição de medicamentos!
 
 ## O que foi usado:
 
@@ -13,6 +13,7 @@
 - Prettier
 - Body Parser
 - Cors
+- Cros-env
 - Compression
 - Bcryptjs
 - Crypto
@@ -22,8 +23,8 @@
 - Path
 - Eslint
 - Prettier
-- Mochajs
-- Chaijs
+- Jest
+- SuperTest
 
 ## Para testar o projeto:
 
@@ -59,8 +60,39 @@ APP_PORT=
 yarn key:generate
 ````
 
+### Configure o .env com as credenciais de e-mail:
+
+> Sugestão de uso [Mailtrap](https://mailtrap.io/), cria uma conta na plataforma, após isso crie uma inboxes e acesse, em integrations e escolha nodemailer, pegue as informações e configure as variaveis de ambiente do .env:
+
+````
+EMAIL_HOST=
+EMAIL_PORT=
+EMAIL_USER=
+EMAIL_PASS=
+````
+
 ### Depois inicialize o servidor:
 
 ````
 yarn dev
 ````
+
+## EndPoints da API:
+
+> Foi utilizado o software insmonia para testes de rotas da api, na raiz do projeto, tem um arquivo exportado do insmonia com todas as rotas da api!
+
+## Teste de functionamento da Api
+  - GET - /test - Testa se a api está funcionando
+
+#### Doctor
+  - POST - /auth/register
+  - POST - /auth
+  - POST - /auth/forgot_password
+  - POST - /auth/reset_password
+
+#### Prescription
+  - GET - /prescription
+  - GET - /prescription/:prescriptionId
+  - POST - /prescription/create
+  - PUT - /prescription/:prescriptionId
+  - DELETE - /prescription/:prescriptionId

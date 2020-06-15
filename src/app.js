@@ -1,4 +1,6 @@
-require('dotenv').config() // Configuração para o env
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+}) // Configuração para o env
 const express = require('express')
 const cors = require('cors')
 const compression = require('compression')

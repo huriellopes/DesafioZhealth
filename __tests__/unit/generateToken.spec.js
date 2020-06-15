@@ -2,8 +2,8 @@ const generateToken = require('../../src/lib/tokenGenerate')
 
 describe('Generate Token API', () => {
   it('should generate token', () => {
-    const token = generateToken()
+    const token = generateToken
 
-    expect(token).toHaveLength(8)
+    expect(token).toHaveLength(40)
   })
 })
